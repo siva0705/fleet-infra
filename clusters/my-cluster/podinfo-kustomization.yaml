@@ -8,10 +8,20 @@ spec:
   path: ./kustomize
   prune: true
   retryInterval: 20s
-  minReplicas: 3
   sourceRef:
     kind: GitRepository
     name: podinfo
   targetNamespace: default
   timeout: 3m0s
   wait: true
+  patches:
+    - patch: |-
+        apiVersion: autoscaling/v2
+        kind: HorizontalPodAutoscaler
+        metadata:
+          name: podinfo
+        spec:
+          minReplicas: 3             
+      target:
+        name: podinfo
+        kind: HorizontalPodAutoscaler
